@@ -78,7 +78,20 @@ public class BasicItemController {
         return "basic/item";
     }
 
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable Long itemId, Model model) {
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item", item);
 
+        return "basic/editForm";
+    }
+
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+        //@ModelAttribute 생략이 가능하지만 굳이 ..? 가시성이 떨어져서 비추천
+        itemRepository.update(itemId, item);
+        return "redirect:/basic/items/{itemId}";
+    }
 
     /**
      * 테스트용 데이터 추가
