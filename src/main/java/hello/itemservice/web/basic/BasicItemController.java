@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -78,13 +79,25 @@ public class BasicItemController {
         return "basic/item";
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV5(Item item) {
         //@ModelAttribute도 생략 가능하다 !
         itemRepository.save(item);
         //redirect 할 때는 경로를 다 적어줘야 한다 . "/" 이부분을 빼게 되면 위에 있는
         //@RequestMapping과 겹치게 되어 basic/items/basic/items 이렇게 나오게 된다.
         return "redirect:/basic/items/" +item.getId();
+    }
+
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+
+        Item savedItem = itemRepository.save(item);
+        //url 인코딩도 됨
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        //redirect 할 때는 경로를 다 적어줘야 한다 . "/" 이부분을 빼게 되면 위에 있는
+        //@RequestMapping과 겹치게 되어 basic/items/basic/items 이렇게 나오게 된다.
+        return "redirect:/basic/items/{itemId}";
     }
 
     @GetMapping("/{itemId}/edit")
