@@ -71,11 +71,20 @@ public class BasicItemController {
         return "basic/item";
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item) {
         //@ModelAttribute도 생략 가능하다 !
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    @PostMapping("/add")
+    public String addItemV5(Item item) {
+        //@ModelAttribute도 생략 가능하다 !
+        itemRepository.save(item);
+        //redirect 할 때는 경로를 다 적어줘야 한다 . "/" 이부분을 빼게 되면 위에 있는
+        //@RequestMapping과 겹치게 되어 basic/items/basic/items 이렇게 나오게 된다.
+        return "redirect:/basic/items/" +item.getId();
     }
 
     @GetMapping("/{itemId}/edit")
